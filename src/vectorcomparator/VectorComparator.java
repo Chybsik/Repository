@@ -27,14 +27,16 @@ public class VectorComparator {
         String path_pattern;
         
         try{
-            s = new String(Files.readAllBytes(Paths.get("C:\\Users\\Timur\\Desktop\\SVG\\this_boy_loves_Christmas-4784.svg")));
-            //s = s.replace("\n", "").replace("\r", "");
+            s = new String(Files.readAllBytes(Paths.get("C:\\temp\\santa-claus.svg")));
         }catch(IOException e){
         }
         
-        path_pattern = "<path.*(\n)*(\r)*/>";
+        path_pattern = "<path[^/]*/>";
         pattern = Pattern.compile(path_pattern);
         matcher = pattern.matcher(s);
+        
+        //List<String> list = new ArrayList<String>();
+        
         if (matcher.find()){
             out.println(matcher.group());
         }else{
