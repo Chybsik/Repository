@@ -8,6 +8,9 @@ import java.io.*;
 import static java.lang.System.out;
 import java.nio.file.*;
 import java.util.regex.*;
+import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,26 +24,8 @@ public class VectorComparator {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        String s = "";
-        Pattern pattern;
-        Matcher matcher;
-        String path_pattern;
-        
-        try{
-            s = new String(Files.readAllBytes(Paths.get("C:\\temp\\santa-claus.svg")));
-        }catch(IOException e){
-        }
-        
-        path_pattern = "<path[^/]*/>";
-        pattern = Pattern.compile(path_pattern);
-        matcher = pattern.matcher(s);
-        
-        //List<String> list = new ArrayList<String>();
-        
-        if (matcher.find()){
-            out.println(matcher.group());
-        }else{
-            out.println("failure");
-        }
+        String p = "C:\\temp\\santa-claus.svg";
+        List<Vector> vector = new ArrayList<Vector>();
+        vector = SVGDestructor.Destruct(p);
     }
 }
