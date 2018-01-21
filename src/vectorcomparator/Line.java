@@ -15,7 +15,7 @@ public class Line {
     double posX2;
     double posY2;
     
-    public Line(double posX1, double posX2, double posY1, double posY2){
+    public Line(double posX1, double posY1, double posX2, double posY2){
         this.posX1 = posX1;
         this.posX2 = posX2;
         this.posY1 = posY1;
