@@ -19,8 +19,18 @@ public class VectorComparator {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        //String p = "C:\\temp\\santa-claus.svg";
-        //List<Vector> vector = new ArrayList<Vector>();
-        //vector = SVGDestructor.Destruct(p);
+        String p = "C:\\temp\\temp.svg";
+        List<Vector> vector = new ArrayList<Vector>();
+        vector = SVGDestructor.Destruct(p);
+        
+        String p2 = "C:\\temp\\temp2.svg";
+        List<Vector> vector2 = new ArrayList<Vector>();
+        vector2 = SVGDestructor.Destruct(p2);
+    }
+    
+    public static double Compare(){
+        double result = 0;
+        
+        return result;
     }
 }

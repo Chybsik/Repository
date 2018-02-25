@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author user
  */
-public class Polyline {
+public class Polyline extends Vector{
     List<Line> lines = new ArrayList<>();
     
     public Polyline(List<Line> lines){

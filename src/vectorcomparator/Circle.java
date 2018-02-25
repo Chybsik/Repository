@@ -13,4 +13,17 @@ public class Circle extends Vector {
     double posX;
     double posY;
     double r;
+    public Circle (double r, Vertex v){
+        this.r = r;
+        posX = v.posX;
+        posY = v.posY;
+    }
+    public Circle (double r, double posX, double posY){
+        this.r = r;
+        this.posX = posX;
+        this.posY = posY;
+    }
+    public double CompareTo(Circle circle){
+        return Math.pow(1, Math.abs(posX-circle.posX))*Math.pow(1, Math.abs(posY-circle.posY))*Math.pow(1, Math.abs(r-circle.r));
+    }
 }

@@ -9,14 +9,15 @@ package vectorcomparator;
  *
  * @author user
  */
-public class Line {
+public class Line extends Vector{
     double posX1;
     double posY1;
     double posX2;
     double posY2;
     double length;
-    double k;
+    
     double weight=1;
+    double angle;
     
     public Line(double posX1, double posY1, double posX2, double posY2){
         this.posX1 = posX1;
@@ -24,8 +25,9 @@ public class Line {
         this.posY1 = posY1;
         this.posY2 = posY2;
         
-        double length = Math.pow(posX1-posX2, 2)+Math.pow(posY1-posY2, 2);
-        double k = (posY2-posY1)/(posX2-posX1);
+        length = Math.pow(posX1-posX2, 2)+Math.pow(posY1-posY2, 2);
+        
+        angle = Math.acos((posX2-posX1)/length)*180;
     }
     public Line(Vertex v1, Vertex v2){
         this.posX1 = v1.posX;
@@ -33,11 +35,10 @@ public class Line {
         this.posY1 = v1.posY;
         this.posY2 = v2.posY;
         
-        double length = Math.sqrt(Math.pow(posX1-posX2, 2)+Math.pow(posY1-posY2, 2));
-        double k = (posY2-posY1)/(posX2-posX1);
+        length = Math.sqrt(Math.pow(posX1-posX2, 2)+Math.pow(posY1-posY2, 2));
+        angle = Math.acos((posX2-posX1)/length)*180;
     }
     public double CompareTo(Line line){
-        double x = 1 - Math.abs(line.length-this.length+line.k-this.k)/2;
-        return (x<0)? 0:x;
+        return Math.pow(0.1, Math.abs(angle-line.angle))*Math.pow(1, Math.abs(length-line.length))*Math.pow(0.1, Math.abs(posX1 - posX2))*Math.pow(0.1, Math.abs(posY1 - posY2));
     }
 }

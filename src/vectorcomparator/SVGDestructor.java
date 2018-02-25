@@ -19,74 +19,64 @@ import java.util.regex.Pattern;
  */
 public class SVGDestructor {
     public static ArrayList Destruct(String path){
+        ArrayList<Vector> list = new ArrayList<>();
         String s = "";
         Pattern p;
         Matcher m;
-        String path_pattern;
         
         try{
             s = new String(Files.readAllBytes(Paths.get(path)));
         }catch(IOException e){
+            return list;
         }
         
-        String pattern = "<[^/]*/>";
+        String pattern = "<[a-z][^\\/]*\\/>";
         p = Pattern.compile(pattern);
         m = p.matcher(s);
         
-        List<Vector> list = new ArrayList<Vector>();
-        
         while (m.find()){
-            String[] words = m.group().split(" ");
+            String str = m.group().replaceAll("\\s+", " ");                     //Убирает табулирование
+            String[] words = str.split(" ");
             switch(words[0]){
-                case "path":;
-                case "rect": list.add(RectDestruct(words));
-                case "circle":;
-                case "ellipse":;
-                case "line":;
-                case "polyline":;
-                case "polygon":;
+                case "<path":break;
+                case "<rect": list.add(RectDestruct(words));break;
+                case "<circle": list.add(CircleDestruct(words));break;
+                case "<ellipse": list.add(EllipseDestruct(words));break;
+                case "<line": list.add(LineDestruct(words));break;
+                case "<polyline": list.add(PolylineDestruct(words, false));break;
+                case "<polygon": list.add(PolygonDestruct(words));break;
+                default: break;
             }
         }
-        return (ArrayList)list;
+        return list;
+        
     }
     public static Rect RectDestruct(String[] words){
         Rect rect = new Rect();
-        for(int i=1; i<words.length; i++){
-            if(words[i].contains("x")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.posX = Double.parseDouble(m.group());
-            }
-            if(words[i].contains("y")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.posY = Double.parseDouble(m.group());
-            }
-            if(words[i].contains("width")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.width = Double.parseDouble(m.group());
-            }
-            if(words[i].contains("height")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.height = Double.parseDouble(m.group());
-            }
-            if(words[i].contains("rx")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.rx = Double.parseDouble(m.group());
-            }
-            if(words[i].contains("ry")){
-                Pattern p = Pattern.compile("\\d*");
-                Matcher m = p.matcher(words[i]);
-                rect.ry = Double.parseDouble(m.group());
+        for (String word : words) {
+            if (word.matches("^x=\"\\d+\"$")) {
+                rect.posX = Double.parseDouble(word.replaceAll("\\D+", ""));
+            }else
+            if (word.matches("^y=\"\\d+\"$")) {
+                rect.posY = Double.parseDouble(word.replaceAll("\\D+", ""));
+            }else
+            if (word.matches("^width=\"\\d+\"$")) {
+                rect.width = Double.parseDouble(word.replaceAll("\\D+", ""));
+            }else
+            if (word.matches("^height=\"\\d+\"$")) {
+                rect.height = Double.parseDouble(word.replaceAll("\\D+", ""));
+            }else
+            if (word.matches("^rx=\"\\d+\"$")) {
+                rect.rx = Double.parseDouble(word.replaceAll("\\D+", ""));
+            }else
+            if (word.matches("^ry=\"\\d+\"$")) {
+                rect.ry = Double.parseDouble(word.replaceAll("\\D+", ""));
             }
         }
         return rect;
     }
     public static Circle CircleDestruct(String[] words){
-        Circle circle = new Circle();
+        Circle circle = new Circle(0,0,0);
         for(int i = 1; i<words.length;i++){
             if(words[i].contains("cx")){
                 Pattern p = Pattern.compile("\\d*");
@@ -107,7 +97,7 @@ public class SVGDestructor {
         return circle;
     }
     public static Ellipse EllipseDestruct(String[] words){
-        Ellipse ellipse = new Ellipse();
+        Ellipse ellipse = new Ellipse(0,0,0,0);
         for(int i = 1; i<words.length;i++){
             if(words[i].contains("cx")){
                 Pattern p = Pattern.compile("\\d*");
