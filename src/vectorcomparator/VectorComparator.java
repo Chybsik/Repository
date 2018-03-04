@@ -18,26 +18,23 @@ public class VectorComparator {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        String p = "C:\\temp\\temp.svg";
+        MainForm form = new MainForm();
+        form.setVisible(true);
+    }
+    
+    public static double Compare(String p, String p2){
         List<Vector> vector = new ArrayList<Vector>();
         vector = SVGDestructor.Destruct(p);
         
-        String p2 = "C:\\temp\\temp2.svg";
         List<Vector> vector2 = new ArrayList<Vector>();
         vector2 = SVGDestructor.Destruct(p2);
         
-        System.out.println(Compare(vector, vector2));
-        
-    }
-    
-    public static double Compare(List<Vector> list, List<Vector> list2){
         double result = 0;
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < list2.size(); j++) {
-                result += list.get(i).CompareTo(list2.get(j));
+        for (int i = 0; i < vector.size(); i++) {
+            for (int j = 0; j < vector2.size(); j++) {
+                result += vector.get(i).CompareTo(vector2.get(j));
             }
         }
-        return result/list.size();
+        return result/vector.size();
     }
 }
