@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author user
  */
-public class Polygon extends Vector{
+public class Polygon{
     List<Line> lines = new ArrayList<>();
     
     public Polygon(List<Line> lines){

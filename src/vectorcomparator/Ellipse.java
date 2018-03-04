@@ -27,7 +27,15 @@ public class Ellipse extends Vector{
         this.posX = posX;
         this.posY = posY;
     }
-    public double CompareTo(Ellipse ellipse){
-        return Math.pow(1, Math.abs(posX-ellipse.posX))*Math.pow(1, Math.abs(posY-ellipse.posY))*Math.pow(1, Math.abs(ry-ellipse.ry))*Math.pow(1, Math.abs(rx-ellipse.rx));
+    public double CompareTo(Vector vector){
+        if (vector.getClass() == Ellipse.class) {
+            Ellipse e = (Ellipse)vector;
+            return Math.pow(0.1, Math.abs(posX-e.posX))*Math.pow(0.1, Math.abs(posY-e.posY))*Math.pow(0.1, Math.abs(ry-e.ry))*Math.pow(0.1, Math.abs(rx-e.rx));
+        }else if(vector.getClass() == Circle.class){
+            Circle c = (Circle)vector;
+            return Math.pow(0.1, Math.abs(posX-c.posX))*Math.pow(0.1, Math.abs(posY-c.posY))*Math.pow(0.1, Math.abs(ry-c.r))*Math.pow(0.1, Math.abs(rx-c.r));
+        }else{
+            return 0;
+        }
     }
 }

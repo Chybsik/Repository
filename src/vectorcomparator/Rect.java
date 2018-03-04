@@ -4,7 +4,7 @@ package vectorcomparator;
  *
  * @author user
  */
-public class Rect extends Vector {
+public class Rect {
     public double posX = 0;
     public double posY = 0;
     public double width = 0;

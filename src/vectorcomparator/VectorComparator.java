@@ -26,11 +26,18 @@ public class VectorComparator {
         String p2 = "C:\\temp\\temp2.svg";
         List<Vector> vector2 = new ArrayList<Vector>();
         vector2 = SVGDestructor.Destruct(p2);
+        
+        System.out.println(Compare(vector, vector2));
+        
     }
     
-    public static double Compare(){
+    public static double Compare(List<Vector> list, List<Vector> list2){
         double result = 0;
-        
-        return result;
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list2.size(); j++) {
+                result += list.get(i).CompareTo(list2.get(j));
+            }
+        }
+        return result/list.size();
     }
 }

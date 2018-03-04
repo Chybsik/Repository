@@ -1,9 +1,10 @@
 package vectorcomparator;
 
 public abstract class Vector{
-    double posX;
-    double posY;
+    double weight;
     
     double transform;
     int rotate;
+    
+    abstract double CompareTo(Vector vector);
 }
