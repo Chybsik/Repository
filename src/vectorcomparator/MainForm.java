@@ -1,11 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vectorcomparator;
 
 import javax.swing.*;
+import java.text.*;
+import java.io.File;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
+import com.kitfox.svg.*;
+import com.kitfox.svg.app.beans.SVGPanel;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -62,6 +69,11 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         bExit.setText("Выход");
+        bExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExitActionPerformed(evt);
+            }
+        });
 
         jTextField1.setEditable(false);
 
@@ -76,12 +88,15 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(bObserve2)
                 .addGap(125, 125, 125))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(bCalculate, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(bExit, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(57, 614, Short.MAX_VALUE)
+                        .addComponent(bExit))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bCalculate, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -89,11 +104,11 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(bExit)
-                .addGap(95, 95, 95)
+                .addGap(101, 101, 101)
                 .addComponent(bCalculate)
                 .addGap(40, 40, 40)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bObserve)
                     .addComponent(bObserve2))
@@ -105,21 +120,65 @@ public class MainForm extends javax.swing.JFrame {
 
     private void bCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCalculateActionPerformed
         
-        //jTextField1.setText(String.valueOf(VectorComparator.Compare(p1, p2)));
+        jTextField1.setText(String.valueOf(new DecimalFormat("#.##").format(VectorComparator.Compare(p1, p2))));
         
-        
+        /*
         JInternalFrame iFrame = new JInternalFrame();
         iFrame.show();
         JButton b = new JButton();
         b.setText(String.valueOf(VectorComparator.Compare(p1, p2)));
         iFrame.add(b);
+        */
         
     }//GEN-LAST:event_bCalculateActionPerformed
 
     private void bObserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserveActionPerformed
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("SVG Files", "svg");
+        
         JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(filter);
         chooser.showOpenDialog(null);
-        p1 = chooser.getSelectedFile().getAbsolutePath();
+        File f = chooser.getSelectedFile();
+        p1 = f.getAbsolutePath();
+        
+        /*
+        try{
+            BufferedImage pic = ImageIO.read(f);
+            JLabel picLabel = new JLabel(new ImageIcon(pic));
+            add(picLabel);
+        }catch(Exception e){
+            System.out.println("exc");
+        }
+        */
+        
+        BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        //g.setClip(jPanel1.getX(), jPanel1.getX(), jPanel1.getHeight(), jPanel1.getWidth());
+        
+        SVGUniverse svgUniverse = new SVGUniverse();
+        try{
+            svgUniverse.loadSVG(f.toURI().toURL());
+                    
+            SVGDiagram svgDiagram = svgUniverse.getDiagram(svgUniverse.loadSVG(f.toURI().toURL()));
+            svgDiagram.render(g);
+            svgDiagram.setIgnoringClipHeuristic(true);
+            
+            svgUniverse.setCurTime(1);
+            svgUniverse.updateTime();
+            System.out.println("nope");
+        }catch(Exception e){
+            System.out.println("catch ya!");
+        }
+        
+        /*
+        SVGPanel svgPanel = new SVGPanel();
+        try{
+            svgPanel.setSvgResourcePath(p1);
+        }catch(Exception e){}
+        svgPanel.setVisible(true);
+        svgPanel.setLocation(jPanel1.getX(), jPanel1.getY());
+        svgPanel.setScaleToFit(true);
+        */
     }//GEN-LAST:event_bObserveActionPerformed
 
     private void bObserve2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserve2ActionPerformed
@@ -127,6 +186,10 @@ public class MainForm extends javax.swing.JFrame {
         chooser.showOpenDialog(null);
         p2 = chooser.getSelectedFile().getAbsolutePath();
     }//GEN-LAST:event_bObserve2ActionPerformed
+
+    private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_bExitActionPerformed
 
     /**
      * @param args the command line arguments
