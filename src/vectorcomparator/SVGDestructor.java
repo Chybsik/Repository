@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vectorcomparator;
 
 import java.io.IOException;
@@ -20,26 +15,24 @@ import java.util.regex.Pattern;
 public class SVGDestructor {
     public static ArrayList Destruct(String path){
         ArrayList<Vector> list = new ArrayList<>();
-        String s = "";
+        String svg = "";
         Pattern p;
         Matcher m;
-        
+        /**
+         * Запись файла SVG в переменную
+        */
         try{
-            s = new String(Files.readAllBytes(Paths.get(path)));
+            svg = new String(Files.readAllBytes(Paths.get(path)));
         }catch(IOException e){
             return list;
         }
         
-        String pattern = "<[a-z][^\\/>]+\\/>";
-        p = Pattern.compile(pattern);
-        m = p.matcher(s);
+        p = Pattern.compile("<[a-z][^\\/>]+\\/>");
+        m = p.matcher(svg);
         
-        /*
-        ArrayList<String> l = new ArrayList<>();
-        while(m.find()){
-            l.add(m.group());
-        }
-        */
+        /**
+         * Запись элементов в формализованую запись
+         */
         
         while (m.find()){
             String str = m.group().replaceAll("\\s+", " ");                     //Убирает табулирование
@@ -56,6 +49,10 @@ public class SVGDestructor {
             }
         }
         
+        /**
+         * Присвоение полю weight каждого элемента значения
+         */
+        
         for (int i = 0; i < list.size()-1; i++) {
             Vector temp = list.get(i);
             for (int j = i+1; j < list.size(); j++) {
@@ -66,8 +63,8 @@ public class SVGDestructor {
         }
         
         return list;
-        
     }
+    
     public static ArrayList<Vector> RectDestruct(String[] words){
         ArrayList<Vector> list = new ArrayList<>();
         
@@ -181,5 +178,43 @@ public class SVGDestructor {
     }
     public static ArrayList<Vector> PolygonDestruct(String[] words){
         return PolylineDestruct(words, true);
+    }
+
+    public static ArrayList<Vector> PathDestruct(String words[]){
+        /**
+         * Восстановление строки
+         */
+        String s = "";
+        for (int i = 1; i < words.length-1; i++) {
+            s += words[i] + " ";
+        }
+        s.replace("d=\"", "");
+        words = s.split("[M,m,Z,z,L,l,H,h,V,v,C,c,S,s,Q,q,T,t,A,a]");
+        
+        ArrayList<Vector> list = new ArrayList<>();
+        
+        Vertex curPos = new Vertex(0,0);
+        for (String word : words) {
+            if (word.matches("^M\\s\\d+\\s\\d+$")) {
+                String[] s = word.split(" ");
+                curPos.Translate(Double.parseDouble(s[1]), Double.parseDouble(s[2]));
+            }else if(word.matches("^L\\s\\d+\\s\\d+$")){
+                Vertex temp = curPos;
+                String[] s = word.split(" ");
+                curPos.Translate(Double.parseDouble(s[1]), Double.parseDouble(s[2]));
+                list.add(new Line(temp, curPos));
+            }else if(word.matches("^H\\s\\d+$")){
+                Vertex temp = curPos;
+                String[] s = word.split(" ");
+                curPos.Translate(Double.parseDouble(s[1]), 0);
+                list.add(new Line(temp, curPos));
+            }else if(word.matches("^V\\s\\d+$")){
+                Vertex temp = curPos;
+                String[] s = word.split(" ");
+                curPos.Translate(0, Double.parseDouble(s[1]));
+                list.add(new Line(temp, curPos));
+            }
+        }
+        return list;
     }
 }

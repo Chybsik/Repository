@@ -17,4 +17,9 @@ public class Vertex {
         this.posX = posX;
         this.posY = posY;
     }
+    
+    public void Translate(double shiftX, double shiftY){
+        this.posX+=shiftX;
+        this.posY+=shiftY;
+    }
 }

@@ -6,8 +6,8 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-import com.kitfox.svg.*;
-import com.kitfox.svg.app.beans.SVGPanel;
+//import com.kitfox.svg.*;
+//import com.kitfox.svg.app.beans.SVGPanel;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -154,7 +154,7 @@ public class MainForm extends javax.swing.JFrame {
         BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         //g.setClip(jPanel1.getX(), jPanel1.getX(), jPanel1.getHeight(), jPanel1.getWidth());
-        
+        /*
         SVGUniverse svgUniverse = new SVGUniverse();
         try{
             svgUniverse.loadSVG(f.toURI().toURL());
@@ -169,7 +169,7 @@ public class MainForm extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("catch ya!");
         }
-        
+        */
         /*
         SVGPanel svgPanel = new SVGPanel();
         try{
