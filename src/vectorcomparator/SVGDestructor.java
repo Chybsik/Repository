@@ -189,30 +189,40 @@ public class SVGDestructor {
             s += words[i] + " ";
         }
         s.replace("d=\"", "");
-        words = s.split("[M,m,Z,z,L,l,H,h,V,v,C,c,S,s,Q,q,T,t,A,a]");
+        //words = s.split("[M,m,Z,z,L,l,H,h,V,v,C,c,S,s,Q,q,T,t,A,a]");
+        
+        Pattern p;
+        Matcher m;
+        
+        p = Pattern.compile("[a-zA-Z]\\s\\d+\\s\\d+");
+        m = p.matcher(s);
         
         ArrayList<Vector> list = new ArrayList<>();
-        
         Vertex curPos = new Vertex(0,0);
-        for (String word : words) {
-            if (word.matches("^M\\s\\d+\\s\\d+$")) {
-                String[] s = word.split(" ");
-                curPos.Translate(Double.parseDouble(s[1]), Double.parseDouble(s[2]));
-            }else if(word.matches("^L\\s\\d+\\s\\d+$")){
-                Vertex temp = curPos;
-                String[] s = word.split(" ");
-                curPos.Translate(Double.parseDouble(s[1]), Double.parseDouble(s[2]));
-                list.add(new Line(temp, curPos));
-            }else if(word.matches("^H\\s\\d+$")){
-                Vertex temp = curPos;
-                String[] s = word.split(" ");
-                curPos.Translate(Double.parseDouble(s[1]), 0);
-                list.add(new Line(temp, curPos));
-            }else if(word.matches("^V\\s\\d+$")){
-                Vertex temp = curPos;
-                String[] s = word.split(" ");
-                curPos.Translate(0, Double.parseDouble(s[1]));
-                list.add(new Line(temp, curPos));
+        
+        while (m.find()){
+            String f = m.group();
+            if (f.matches("^M\\s\\d+\\s\\d+$")) {
+                String[] temp = f.split(" ");
+                curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+            }else if(f.matches("^L\\s\\d+\\s\\d+$")){
+                Vertex prevPos = curPos;
+                String[] temp = f.split(" ");
+                curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+                list.add(new Line(prevPos, curPos));
+            }else if(f.matches("^H\\s\\d+$")){
+                Vertex prevPos = curPos;
+                String[] temp = f.split(" ");
+                curPos.Translate(Double.parseDouble(temp[1]), 0);
+                list.add(new Line(prevPos, curPos));
+            }else if(f.matches("^V\\s\\d+$")){
+                Vertex prevPos = curPos;
+                String[] temp = f.split(" ");
+                curPos.Translate(0, Double.parseDouble(temp[1]));
+                list.add(new Line(prevPos, curPos));
+            }else if(f.matches("^C\\s\\d+$")){
+                String[] temp = f.split(" ");
+                list.add(new CubicBezier)
             }
         }
         return list;
