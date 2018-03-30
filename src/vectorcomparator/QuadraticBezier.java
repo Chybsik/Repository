@@ -9,7 +9,7 @@ package vectorcomparator;
  *
  * @author user
  */
-public class QuadraticBezier {
+public class QuadraticBezier extends Vector{
     Vertex sp;
     Vertex ep;
     Vertex cp;
@@ -18,5 +18,9 @@ public class QuadraticBezier {
         this.cp = controlPoint;
         this.ep = endPoint;
         this.sp = startPoint;
+    }
+    public double CompareTo(Vector v){
+        QuadraticBezier curve = (QuadraticBezier)v;
+        return sp.CompareTo(curve.sp)*ep.CompareTo(curve.ep)*cp.CompareTo(curve.cp);
     }
 }

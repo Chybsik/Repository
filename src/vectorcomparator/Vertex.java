@@ -22,4 +22,8 @@ public class Vertex {
         this.posX+=shiftX;
         this.posY+=shiftY;
     }
+    
+    public double CompareTo(Vertex v){
+        return Math.pow(0.1, Math.abs(posX - v.posX));
+    }
 }

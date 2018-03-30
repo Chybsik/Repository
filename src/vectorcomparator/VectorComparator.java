@@ -35,6 +35,6 @@ public class VectorComparator {
                 result += vector.get(i).CompareTo(vector2.get(j));
             }
         }
-        return result/vector.size();
+        return vector.size()==0 ? 0:result/vector.size();
     }
 }

@@ -9,7 +9,7 @@ package vectorcomparator;
  *
  * @author user
  */
-public class CubicBezier {
+public class CubicBezier extends Vector {
     Vertex sp;
     Vertex ep;
     Vertex cp1;
@@ -20,5 +20,9 @@ public class CubicBezier {
         this.ep = endPoint;
         this.cp1 = controlPoint1;
         this.cp2 = controlPoint2;
+    }
+    public double CompareTo(Vector v){
+        CubicBezier curve = (CubicBezier)v;
+        return sp.CompareTo(curve.sp)*ep.CompareTo(curve.ep)*cp1.CompareTo(curve.cp1)*cp2.CompareTo(curve.cp2);
     }
 }

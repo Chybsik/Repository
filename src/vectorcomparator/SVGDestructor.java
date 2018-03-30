@@ -38,7 +38,7 @@ public class SVGDestructor {
             String str = m.group().replaceAll("\\s+", " ");                     //Убирает табулирование
             String[] words = str.split(" ");
             switch(words[0]){
-                case "<path":break;
+                case "<path": list.addAll(PathDestruct(words));break;
                 case "<rect": list.addAll(RectDestruct(words));break;
                 case "<circle": list.add(CircleDestruct(words));break;
                 case "<ellipse": list.add(EllipseDestruct(words));break;
@@ -199,30 +199,142 @@ public class SVGDestructor {
         
         ArrayList<Vector> list = new ArrayList<>();
         Vertex curPos = new Vertex(0,0);
+        Vertex origin = new Vertex(0,0);
         
         while (m.find()){
             String f = m.group();
-            if (f.matches("^M\\s\\d+\\s\\d+$")) {
-                String[] temp = f.split(" ");
+            if (f.matches("^m\\s?\\d+\\s?\\,?\\d+$")) {
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
-            }else if(f.matches("^L\\s\\d+\\s\\d+$")){
+            }else if(f.matches("^l\\s?\\d+\\s?\\,?\\d+$")){
                 Vertex prevPos = curPos;
-                String[] temp = f.split(" ");
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
                 list.add(new Line(prevPos, curPos));
-            }else if(f.matches("^H\\s\\d+$")){
+            }else if(f.matches("^h\\s?\\d+$")){
                 Vertex prevPos = curPos;
-                String[] temp = f.split(" ");
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), 0);
                 list.add(new Line(prevPos, curPos));
-            }else if(f.matches("^V\\s\\d+$")){
+            }else if(f.matches("^v\\s?\\d+$")){
                 Vertex prevPos = curPos;
-                String[] temp = f.split(" ");
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
                 curPos.Translate(0, Double.parseDouble(temp[1]));
                 list.add(new Line(prevPos, curPos));
-            }else if(f.matches("^C\\s\\d+$")){
-                String[] temp = f.split(" ");
-                list.add(new CubicBezier)
+            }else if(f.matches("^c\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                Vertex prevPos = curPos;
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
+                Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1])+prevPos.posX, Double.parseDouble(temp[2])+prevPos.posY);
+                Vertex controlPoint2 = new Vertex(Double.parseDouble(temp[3])+prevPos.posX, Double.parseDouble(temp[4])+prevPos.posY);
+                list.add(new CubicBezier(prevPos, curPos, controlPoint1, controlPoint2));
+            }else if(f.matches("^s\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                Vertex prevPos = curPos;
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
+                Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1])+prevPos.posX, Double.parseDouble(temp[2])+prevPos.posY);
+                list.add(new CubicBezier(prevPos, curPos, controlPoint1, controlPoint1));
+            }else if(f.matches("q^\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                Vertex prevPos = curPos;
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
+                Vertex controlPoint = new Vertex(Double.parseDouble(temp[1])+prevPos.posX, Double.parseDouble(temp[2])+prevPos.posY);
+                list.add(new QuadraticBezier(prevPos, curPos, controlPoint));
+            }else if(f.matches("t^\\s?\\d+\\s?\\,?\\d+$")){
+                Vertex prevPos = curPos;
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
+                Vertex controlPoint = new Vertex(Double.parseDouble(temp[1])+prevPos.posX, Double.parseDouble(temp[2])+prevPos.posY);
+                list.add(new QuadraticBezier(prevPos, curPos, controlPoint));
+            }else if (f.matches("^M\\s?\\d+\\s?\\,?\\d+$")) {
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                curPos.posX = Double.parseDouble(temp[1]);
+                curPos.posY = Double.parseDouble(temp[2]);
+            }else if(f.matches("^L\\s?\\d+\\s?\\,?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                list.add(new Line(origin, new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]))));
+            }else if(f.matches("^H\\s?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                list.add(new Line(origin, new Vertex(Double.parseDouble(temp[1]), 0)));
+            }else if(f.matches("^V\\s?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                list.add(new Line(origin, new Vertex(0, Double.parseDouble(temp[1]))));
+            }else if(f.matches("^C\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+                Vertex controlPoint2 = new Vertex(Double.parseDouble(temp[3]), Double.parseDouble(temp[4]));
+                list.add(new CubicBezier(origin, new Vertex(Double.parseDouble(temp[5]), Double.parseDouble(temp[6])), controlPoint1, controlPoint2));
+            }else if(f.matches("^S\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+                list.add(new CubicBezier(origin, new Vertex(Double.parseDouble(temp[5]), Double.parseDouble(temp[6])), controlPoint1, controlPoint1));
+            }else if(f.matches("Q^\\s?\\d+\\s?\\,?\\d+\\s?\\,?\\d+\\s?\\,?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                Vertex controlPoint = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+                list.add(new QuadraticBezier(origin, new Vertex(Double.parseDouble(temp[5]), Double.parseDouble(temp[6])), controlPoint));
+            }else if(f.matches("T^\\s?\\d+\\s?\\,?\\d+$")){
+                
+                String[] temp = new String[0];
+                if(f.contains(",")){
+                    temp = f.split(",");
+                }else{temp = f.split(" ");}
+                Vertex controlPoint = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
+                list.add(new QuadraticBezier(origin, new Vertex(Double.parseDouble(temp[5]), Double.parseDouble(temp[6])), controlPoint));
             }
         }
         return list;
