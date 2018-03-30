@@ -206,6 +206,7 @@ public class SVGDestructor {
             if (f.matches("^m\\s?\\d+\\s?\\,?\\d+$")) {
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
@@ -213,6 +214,7 @@ public class SVGDestructor {
                 Vertex prevPos = curPos;
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
@@ -221,6 +223,7 @@ public class SVGDestructor {
                 Vertex prevPos = curPos;
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[1]), 0);
@@ -229,6 +232,7 @@ public class SVGDestructor {
                 Vertex prevPos = curPos;
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(0, Double.parseDouble(temp[1]));
@@ -237,6 +241,7 @@ public class SVGDestructor {
                 Vertex prevPos = curPos;
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
@@ -248,6 +253,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
@@ -258,6 +264,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
@@ -268,6 +275,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.Translate(Double.parseDouble(temp[5]), Double.parseDouble(temp[6]));
@@ -277,6 +285,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 curPos.posX = Double.parseDouble(temp[1]);
@@ -285,6 +294,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 list.add(new Line(origin, new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]))));
@@ -292,6 +302,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 list.add(new Line(origin, new Vertex(Double.parseDouble(temp[1]), 0)));
@@ -299,6 +310,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 list.add(new Line(origin, new Vertex(0, Double.parseDouble(temp[1]))));
@@ -306,6 +318,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
@@ -315,6 +328,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 Vertex controlPoint1 = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
@@ -323,6 +337,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 Vertex controlPoint = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
@@ -331,6 +346,7 @@ public class SVGDestructor {
                 
                 String[] temp = new String[0];
                 if(f.contains(",")){
+                    f.replace("m", "m,");
                     temp = f.split(",");
                 }else{temp = f.split(" ");}
                 Vertex controlPoint = new Vertex(Double.parseDouble(temp[1]), Double.parseDouble(temp[2]));
