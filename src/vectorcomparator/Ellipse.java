@@ -15,6 +15,8 @@ public class Ellipse extends Vector{
     double rx;
     double ry;
     
+    double weight =1;
+    
     public Ellipse (double rx, double ry, Vertex v){
         this.rx = rx;
         this.ry = ry;

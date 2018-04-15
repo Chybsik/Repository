@@ -14,13 +14,20 @@ public class QuadraticBezier extends Vector{
     Vertex ep;
     Vertex cp;
     
+    double weight = 1;
+    
     public QuadraticBezier(Vertex startPoint, Vertex endPoint, Vertex controlPoint){
         this.cp = controlPoint;
         this.ep = endPoint;
         this.sp = startPoint;
     }
-    public double CompareTo(Vector v){
-        QuadraticBezier curve = (QuadraticBezier)v;
+    public double CompareTo(Vector vector){
+        if (vector.getClass()==QuadraticBezier.class) {
+            QuadraticBezier curve = (QuadraticBezier)vector;
         return sp.CompareTo(curve.sp)*ep.CompareTo(curve.ep)*cp.CompareTo(curve.cp);
+        }else{
+            return 0;
+        }
+        
     }
 }
