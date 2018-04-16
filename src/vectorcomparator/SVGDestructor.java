@@ -21,24 +21,28 @@ public class SVGDestructor {
         String svg = "";
         Pattern p;
         Matcher m;
-        
+
+//        Pattern doublePattern;
+//        String doublePatternString = "\\-?\\d+(\\.\\d+)?";
         /**
          * Запись файла SVG в переменную
          */
         try {
             svg = new String(Files.readAllBytes(Paths.get(path)));
         } catch (IOException e) {
+            
             return list;
         }
 
         p = Pattern.compile("<[a-z][^(\\/>)]+\\/>");
         m = p.matcher(svg);
+//        doublePattern  = Pattern.compile("\\-?\\d+(\\.\\d+)?");
 
         /**
          * Запись элементов в формализованую запись
          */
         while (m.find()) {
-            String str = m.group().replaceAll("\\s+", " ");                     //Убирает табулирование
+            String str = m.group().replaceAll("\\s{2,}", " ");                     //Убирает табулирование
             String[] words = str.split(" ");
             switch (words[0]) {
                 case "<path":
@@ -75,15 +79,16 @@ public class SVGDestructor {
             for (int j = i + 1; j < list.size(); j++) {
                 Vector temp2 = list.get(j);
                 temp.weight *= 1 - temp.CompareTo(temp2);
-                list.set(i, temp);
+
             }
+            list.set(i, temp);
         }
 
         return list;
     }
-    
-    public static String Clean(String str){
-        String[] lib = new String[]{"requiredFeatures", "requiredExtensions", "systemLanguage","id", "xml:base", "xml:lang", "xml:space","onfocusin", "onfocusout", "onactivate", "onclick", "onmousedown", "onmouseup", "onmouseover", "onmousemove", "onmouseout", "onload","alignment-baseline", "baseline-shift", "clip", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cursor", "direction", "display", "dominant-baseline", "enable-background", "fill", "fill-opacity", "fill-rule", "filter", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "glyph-orientation-horizontal", "glyph-orientation-vertical", "image-rendering", "kerning", "letter-spacing", "lighting-color", "marker-end", "marker-mid", "marker-start", "mask", "opacity", "overflow", "pointer-events", "shape-rendering", "stop-color", "stop-opacity", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "text-anchor", "text-decoration", "text-rendering", "unicode-bidi", "visibility", "word-spacing", "writing-mode","class","style","externalResourcesRequired","transform","pathLength"};
+
+    public static String Clean(String str) {
+        String[] lib = new String[]{"requiredFeatures", "requiredExtensions", "systemLanguage", "id", "xml:base", "xml:lang", "xml:space", "onfocusin", "onfocusout", "onactivate", "onclick", "onmousedown", "onmouseup", "onmouseover", "onmousemove", "onmouseout", "onload", "alignment-baseline", "baseline-shift", "clip", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cursor", "direction", "display", "dominant-baseline", "enable-background", "fill", "fill-opacity", "fill-rule", "filter", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "glyph-orientation-horizontal", "glyph-orientation-vertical", "image-rendering", "kerning", "letter-spacing", "lighting-color", "marker-end", "marker-mid", "marker-start", "mask", "opacity", "overflow", "pointer-events", "shape-rendering", "stop-color", "stop-opacity", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "text-anchor", "text-decoration", "text-rendering", "unicode-bidi", "visibility", "word-spacing", "writing-mode", "class", "style", "externalResourcesRequired", "transform", "pathLength"};
         for (int i = 0; i < lib.length; i++) {
             str = str.replace(lib[i], "");
         }
@@ -96,17 +101,17 @@ public class SVGDestructor {
         Rect rect = new Rect();
         for (String word : words) {
             if (word.matches("^x=\"\\d+\"$")) {
-                rect.posX = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.posX = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             } else if (word.matches("^y=\"\\d+\"$")) {
-                rect.posY = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.posY = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             } else if (word.matches("^width=\"\\d+%?\"$")) {
-                rect.width = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.width = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             } else if (word.matches("^height=\"\\d+%?\"$")) {
-                rect.height = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.height = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             } else if (word.matches("^rx=\"\\d+\"$")) {
-                rect.rx = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.rx = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             } else if (word.matches("^ry=\"\\d+\"$")) {
-                rect.ry = Double.parseDouble(word.replaceAll("\\D+", ""));
+                rect.ry = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
         }
 
@@ -118,62 +123,63 @@ public class SVGDestructor {
     }
 
     public static Circle CircleDestruct(String[] words) {
-        Circle circle = new Circle(0, 0, 0);
+        Circle circle = new Circle();
         for (String word : words) {
             if (word.matches("^cx=\"\\d+\"$")) {
-                circle.posX = Double.parseDouble(word.replaceAll("\\D+", ""));
+                circle.posX = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
             if (word.matches("^cy=\"\\d+\"$")) {
-                circle.posY = Double.parseDouble(word.replaceAll("\\D+", ""));
+                circle.posY = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
             if (word.matches("^r=\"\\d+\"$")) {
-                circle.r = Double.parseDouble(word.replaceAll("\\D+", ""));
+                circle.r = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
         }
         return circle;
     }
 
     public static Ellipse EllipseDestruct(String[] words) {
-        Ellipse ellipse = new Ellipse(0, 0, 0, 0);
+        Ellipse ellipse = new Ellipse();
         for (String word : words) {
             if (word.matches("^cx=\"\\d+\"$")) {
-                ellipse.posX = Double.parseDouble(word.replaceAll("\\D+", ""));
+                ellipse.posX = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
             if (word.matches("^cy=\"\\d+\"$")) {
-                ellipse.posY = Double.parseDouble(word.replaceAll("\\D+", ""));
+                ellipse.posY = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
             if (word.matches("^rx=\"\\d+\"$")) {
-                ellipse.rx = Double.parseDouble(word.replaceAll("\\D+", ""));
+                ellipse.rx = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
             if (word.matches("^ry=\"\\d+\"$")) {
-                ellipse.ry = Double.parseDouble(word.replaceAll("\\D+", ""));
+                ellipse.ry = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
         }
         return ellipse;
     }
 
     public static Line LineDestruct(String[] words) {
-        Line line = new Line(0, 0, 0, 0);
+        Line line = new Line();
+        Pattern p = Pattern.compile("\\-?\\d+(\\.\\d+)?");
         for (int i = 1; i < words.length; i++) {
             if (words[i].contains("x1")) {
-                Pattern p = Pattern.compile("\\d*");
+                words[i] = words[i].replace("x1", "");
                 Matcher m = p.matcher(words[i]);
-                line.posX1 = Double.parseDouble(m.group());
+                line.SetX1(m.find() ? Double.parseDouble(m.group()) : 0);
             }
             if (words[i].contains("x2")) {
-                Pattern p = Pattern.compile("\\d*");
+                words[i] = words[i].replace("x2", "");
                 Matcher m = p.matcher(words[i]);
-                line.posX2 = Double.parseDouble(m.group());
+                line.SetX2(m.find() ? Double.parseDouble(m.group()) : 0);
             }
             if (words[i].contains("y1")) {
-                Pattern p = Pattern.compile("\\d*");
+                words[i] = words[i].replace("y1", "");
                 Matcher m = p.matcher(words[i]);
-                line.posY1 = Double.parseDouble(m.group());
+                line.SetY1(m.find() ? Double.parseDouble(m.group()) : 0);
             }
             if (words[i].contains("y2")) {
-                Pattern p = Pattern.compile("\\d*");
+                words[i] = words[i].replace("y2", "");
                 Matcher m = p.matcher(words[i]);
-                line.posY2 = Double.parseDouble(m.group());
+                line.SetY2(m.find() ? Double.parseDouble(m.group()) : 0);
             }
         }
         return line;
@@ -186,8 +192,12 @@ public class SVGDestructor {
             if (words[i].contains(",")) {
                 Pattern p = Pattern.compile("\\d*");
                 Matcher m = p.matcher(words[i]);
-                Double x = Double.parseDouble(m.group());
-                Double y = Double.parseDouble(m.group());
+                double x = 0;
+                double y = 0;
+
+                x = m.find() ? Double.parseDouble(m.group()) : 0;
+                y = m.find() ? Double.parseDouble(m.group()) : 0;
+
                 vertices.add(new Vertex(x, y));
             }
         }
@@ -206,41 +216,28 @@ public class SVGDestructor {
     }
 
     public static ArrayList<Vector> PathDestruct(String str) {
-        
-        //s.replace("d=\"", "");
-        //words = s.split("[M,m,Z,z,L,l,H,h,V,v,C,c,S,s,Q,q,T,t,A,a]");
 
-        //Pattern p;
-        //Matcher m;
-        /*
-        p = Pattern.compile("[a-zA-Z]\\s?(\\-?\\d+\\.?\\-?\\d+\\s?\\,?){0,6}");
-        m = p.matcher(s);
-         */
-        
         Pattern p1 = Pattern.compile("\\sd=\"[^\"]+\""); //паттерн для вычленения геометрической составляющей элемента
         Matcher m1 = p1.matcher(str);
-        str = m1.group().replace("d=\"", "");
-        str = str.replace("\"", "");
-
-        String[] e = str.split("(?=[a-zA-Z])");
-        
-//        ArrayList<String> e = new ArrayList();
-//        
-//        Pattern p1 = Pattern.compile("[A-Za-z][^A-Za-z]+");
-//        Matcher m1 = p1.matcher(str);
-//        while(m1.find()){
-//            e.add(m1.group());
-//        }
+        String s = "";
+        if (m1.find()) {
+            s = m1.group().replace("d=\"", "");
+            s = s.replace("\"", "");
+        }
+        String[] e = s.split("(?=[a-zA-Z])");
 
         ArrayList<Vector> list = new ArrayList<>();
         Vertex curPos = new Vertex(0, 0);
         Vertex origin = null;
 
         Pattern p = Pattern.compile("\\-?\\d+(\\.\\d+)?"); //паттерн для вычленения параметров
-        
+
         Vertex prevCubicBezierPoint = new Vertex(); //Для использования при разбиении кубических кривых Безье
         Vertex prevQuadraticBezierPoint = new Vertex();
 
+        if (e.length == 0) {
+            return new ArrayList();
+        }
         for (String el : e) {
             if (el.contains("m")) {
                 double x = 0;
@@ -255,7 +252,7 @@ public class SVGDestructor {
                     }
                     i++;
                 }
-                
+
 //                if (i % 2 != 0|i==0) {
 //                    System.err.println("Bad file structure!");
 //                    list.remove(list.size()-1);
@@ -264,8 +261,8 @@ public class SVGDestructor {
                 prevCubicBezierPoint = null;
                 prevQuadraticBezierPoint = null;
             } else if (el.contains("l")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 double y = 0;
@@ -280,7 +277,7 @@ public class SVGDestructor {
                         curPos.Translate(x, y);
                         list.add(new Line(prevPos, curPos));
 
-                        prevPos = curPos;
+                        prevPos = new Vertex(curPos);
                     }
                     i++;
                 }
@@ -293,8 +290,8 @@ public class SVGDestructor {
 
             } else if (el.contains("h")) {
 
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 Matcher m = p.matcher(el);
@@ -310,8 +307,8 @@ public class SVGDestructor {
 
             } else if (el.contains("v")) {
 
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double y = 0;
                 Matcher m = p.matcher(el);
@@ -326,8 +323,8 @@ public class SVGDestructor {
                 prevQuadraticBezierPoint = null;
 
             } else if (el.contains("c")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 double y = 0;
@@ -361,7 +358,7 @@ public class SVGDestructor {
                             Vertex controlPoint1 = new Vertex(x1 + prevPos.posX, y1 + prevPos.posY);
                             Vertex controlPoint2 = new Vertex(x2 + prevPos.posX, y2 + prevPos.posY);
                             list.add(new CubicBezier(prevPos, curPos, controlPoint1, controlPoint2));
-                            prevPos = curPos;
+                            prevPos = new Vertex(curPos);
                             prevCubicBezierPoint = new Vertex(controlPoint2);
                             prevQuadraticBezierPoint = null;
                             break;
@@ -373,8 +370,8 @@ public class SVGDestructor {
 //                    list.remove(list.size()-1);
 //                }
             } else if (el.contains("s")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 double y = 0;
@@ -408,7 +405,7 @@ public class SVGDestructor {
 
                             Vertex controlPoint2 = new Vertex(x2 + prevPos.posX, y2 + prevPos.posY);
                             list.add(new CubicBezier(prevPos, curPos, controlPoint1, controlPoint2));
-                            prevPos = curPos;
+                            prevPos = new Vertex(curPos);
                             prevCubicBezierPoint = new Vertex(controlPoint2);
                             prevQuadraticBezierPoint = null;
                             break;
@@ -421,8 +418,8 @@ public class SVGDestructor {
 //                }
 
             } else if (el.contains("q")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 double y = 0;
@@ -447,7 +444,7 @@ public class SVGDestructor {
                             curPos.Translate(x, y);
                             Vertex controlPoint = new Vertex(x1 + prevPos.posX, y1 + prevPos.posY);
                             list.add(new QuadraticBezier(prevPos, curPos, controlPoint));
-                            prevPos = curPos;
+                            prevPos = new Vertex(curPos);
                             prevCubicBezierPoint = null;
                             prevQuadraticBezierPoint = new Vertex(controlPoint);
                             break;
@@ -459,8 +456,8 @@ public class SVGDestructor {
 //                    list.remove(list.size()-1);
 //                }
             } else if (el.contains("t")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double x = 0;
                 double y = 0;
@@ -494,7 +491,7 @@ public class SVGDestructor {
                             }
 
                             list.add(new QuadraticBezier(prevPos, curPos, controlPoint));
-                            prevPos = curPos;
+                            prevPos = new Vertex(curPos);
                             prevCubicBezierPoint = null;
                             prevQuadraticBezierPoint = new Vertex(controlPoint);
                             break;
@@ -506,8 +503,8 @@ public class SVGDestructor {
 //                    list.remove(list.size()-1);
 //                }
             } else if (el.contains("a")) {
-                Vertex prevPos = curPos;
-                origin = origin == null ? curPos : origin;
+                Vertex prevPos = new Vertex(curPos);
+                origin = origin == null ? new Vertex(curPos) : origin;
 
                 double rx = 0;
                 double ry = 0;
@@ -543,7 +540,7 @@ public class SVGDestructor {
                             y = Double.parseDouble(m.group());
                             curPos.Translate(x, y);
                             list.add(new Arc(rx, ry, xAxisRotation, largeArcDlag, sweepFlag, x, y));
-                            prevPos = curPos;
+                            prevPos = new Vertex(curPos);
                             prevCubicBezierPoint = null;
                             prevQuadraticBezierPoint = null;
                             break;

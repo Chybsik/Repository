@@ -9,25 +9,28 @@ package vectorcomparator;
  *
  * @author user
  */
-public class QuadraticBezier extends Vector{
+public class QuadraticBezier extends Vector {
+
     Vertex sp;
     Vertex ep;
     Vertex cp;
-    
-    double weight = 1;
-    
-    public QuadraticBezier(Vertex startPoint, Vertex endPoint, Vertex controlPoint){
+
+    double weight;
+
+    public QuadraticBezier(Vertex startPoint, Vertex endPoint, Vertex controlPoint) {
         this.cp = controlPoint;
         this.ep = endPoint;
         this.sp = startPoint;
+        this.weight = 1;
     }
-    public double CompareTo(Vector vector){
-        if (vector.getClass()==QuadraticBezier.class) {
-            QuadraticBezier curve = (QuadraticBezier)vector;
-        return sp.CompareTo(curve.sp)*ep.CompareTo(curve.ep)*cp.CompareTo(curve.cp);
-        }else{
+
+    public double CompareTo(Vector vector) {
+        if (vector.getClass() == QuadraticBezier.class) {
+            QuadraticBezier curve = (QuadraticBezier) vector;
+            return sp.CompareTo(curve.sp) * ep.CompareTo(curve.ep) * cp.CompareTo(curve.cp);
+        } else {
             return 0;
         }
-        
+
     }
 }

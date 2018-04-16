@@ -8,9 +8,10 @@ import javax.imageio.ImageIO;
 
 //import com.kitfox.svg.*;
 //import com.kitfox.svg.app.beans.SVGPanel;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import java.util.ArrayList;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -20,9 +21,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    String p1;
-    String p2;
-    
+    private String p1;
+    private String p2;
+    private FileNameExtensionFilter svgFilter = new FileNameExtensionFilter("SVG Files", "svg");
+
+    private ArrayList<Vector> vector;
+    private ArrayList<Vector> vector2;
+
     /**
      * Creates new form MainForm
      */
@@ -39,13 +44,57 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser = new javax.swing.JFileChooser();
+        jDialogError = new javax.swing.JDialog();
+        jButton1 = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
         bObserve = new javax.swing.JButton();
         bObserve2 = new javax.swing.JButton();
         bCalculate = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        Path1 = new javax.swing.JTextField();
-        Path2 = new javax.swing.JTextField();
+        tOutput = new javax.swing.JTextField();
+        tPath1 = new javax.swing.JTextField();
+        tPath2 = new javax.swing.JTextField();
+
+        jFileChooser.setDialogTitle("Выберите файл");
+        jFileChooser.setEnabled(false);
+
+        jDialogError.setAlwaysOnTop(true);
+        jDialogError.setEnabled(false);
+        jDialogError.setName("Ошибка"); // NOI18N
+
+        jButton1.setText("ОК");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setText("возникла ошибка");
+
+        javax.swing.GroupLayout jDialogErrorLayout = new javax.swing.GroupLayout(jDialogError.getContentPane());
+        jDialogError.getContentPane().setLayout(jDialogErrorLayout);
+        jDialogErrorLayout.setHorizontalGroup(
+            jDialogErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogErrorLayout.createSequentialGroup()
+                .addGroup(jDialogErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialogErrorLayout.createSequentialGroup()
+                        .addGap(252, 252, 252)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDialogErrorLayout.createSequentialGroup()
+                        .addGap(238, 238, 238)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(295, Short.MAX_VALUE))
+        );
+        jDialogErrorLayout.setVerticalGroup(
+            jDialogErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogErrorLayout.createSequentialGroup()
+                .addContainerGap(105, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(103, 103, 103)
+                .addComponent(jButton1)
+                .addGap(49, 49, 49))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,35 +126,34 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setEditable(false);
+        tOutput.setEditable(false);
 
-        Path1.setEditable(false);
+        tPath1.setEditable(false);
 
-        Path2.setEditable(false);
+        tPath2.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bExit)
-                    .addComponent(bCalculate)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(143, 143, 143)
-                .addComponent(bObserve)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
-                .addComponent(bObserve2)
-                .addGap(125, 125, 125))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(Path1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Path2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tPath1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bObserve))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bExit, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bCalculate, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tOutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bObserve2)
+                            .addComponent(tPath2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 14, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,11 +163,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(101, 101, 101)
                 .addComponent(bCalculate)
                 .addGap(40, 40, 40)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addComponent(tOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Path1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Path2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tPath1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tPath2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bObserve)
@@ -131,29 +179,33 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCalculateActionPerformed
-        
-        jTextField1.setText(String.valueOf(new DecimalFormat("#.##").format(VectorComparator.Compare(p1, p2))));
-        
+
+        tOutput.setText(String.valueOf(new DecimalFormat("#.##").format(Util.Compare(vector, vector2))));
+
         /*
         JInternalFrame iFrame = new JInternalFrame();
         iFrame.show();
         JButton b = new JButton();
         b.setText(String.valueOf(VectorComparator.Compare(p1, p2)));
         iFrame.add(b);
-        */
-        
+         */
+
     }//GEN-LAST:event_bCalculateActionPerformed
 
     private void bObserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserveActionPerformed
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("SVG Files", "svg");
-        
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileFilter(filter);
-        chooser.showOpenDialog(null);
-        File f = chooser.getSelectedFile();
-        p1 = f.getAbsolutePath();
-        Path1.setText(p1);
-        
+
+        jFileChooser.setFileFilter(svgFilter);
+        jFileChooser.showOpenDialog(null);
+        try {
+            p1 = jFileChooser.getSelectedFile().getAbsolutePath();
+            tPath1.setText(p1);
+        } catch (Exception e) {
+        }
+        try {
+            vector = Util.Verify(p1);
+        } catch (Exception e) {
+        }
+
         /*
         try{
             BufferedImage pic = ImageIO.read(f);
@@ -162,10 +214,9 @@ public class MainForm extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("exc");
         }
-        */
-        
-        BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
+         */
+//        BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D g = image.createGraphics();
         //g.setClip(jPanel1.getX(), jPanel1.getX(), jPanel1.getHeight(), jPanel1.getWidth());
         /*
         SVGUniverse svgUniverse = new SVGUniverse();
@@ -182,8 +233,8 @@ public class MainForm extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("catch ya!");
         }
-        */
-        /*
+         */
+ /*
         SVGPanel svgPanel = new SVGPanel();
         try{
             svgPanel.setSvgResourcePath(p1);
@@ -191,19 +242,33 @@ public class MainForm extends javax.swing.JFrame {
         svgPanel.setVisible(true);
         svgPanel.setLocation(jPanel1.getX(), jPanel1.getY());
         svgPanel.setScaleToFit(true);
-        */
+         */
     }//GEN-LAST:event_bObserveActionPerformed
 
     private void bObserve2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserve2ActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(null);
-        p2 = chooser.getSelectedFile().getAbsolutePath();
-        Path2.setText(p2);
+
+        jFileChooser.setFileFilter(svgFilter);
+        jFileChooser.showOpenDialog(null);
+        try {
+            p2 = jFileChooser.getSelectedFile().getAbsolutePath();
+            tPath2.setText(p2);
+        } catch (Exception e) {
+        }
+        try {
+            vector2 = Util.Verify(p2);
+        } catch (Exception e) {
+        }
+
     }//GEN-LAST:event_bObserve2ActionPerformed
 
     private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
         this.dispose();
     }//GEN-LAST:event_bExitActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,12 +306,16 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Path1;
-    private javax.swing.JTextField Path2;
     private javax.swing.JButton bCalculate;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bObserve;
     private javax.swing.JButton bObserve2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jButton1;
+    public javax.swing.JDialog jDialogError;
+    private javax.swing.JFileChooser jFileChooser;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField tOutput;
+    private javax.swing.JTextField tPath1;
+    private javax.swing.JTextField tPath2;
     // End of variables declaration//GEN-END:variables
 }
