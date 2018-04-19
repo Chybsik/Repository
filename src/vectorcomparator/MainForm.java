@@ -113,6 +113,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         bCalculate.setText("Рассчитать");
+        bCalculate.setEnabled(false);
         bCalculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bCalculateActionPerformed(evt);
@@ -198,13 +199,17 @@ public class MainForm extends javax.swing.JFrame {
         jFileChooser.showOpenDialog(null);
         try {
             p1 = jFileChooser.getSelectedFile().getAbsolutePath();
-            tPath1.setText(p1);
-        } catch (Exception e) {
-        }
-        try {
             vector = Util.Verify(p1);
+            if (vector==null) {
+                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            tPath1.setText(p1);
+            bCalculate.setEnabled(vector2!=null ? true:false);
         } catch (Exception e) {
+            vector =null;
         }
+        
+        
 
         /*
         try{
@@ -251,12 +256,14 @@ public class MainForm extends javax.swing.JFrame {
         jFileChooser.showOpenDialog(null);
         try {
             p2 = jFileChooser.getSelectedFile().getAbsolutePath();
-            tPath2.setText(p2);
-        } catch (Exception e) {
-        }
-        try {
             vector2 = Util.Verify(p2);
+            if (vector==null) {
+                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            tPath2.setText(p2);
+            bCalculate.setEnabled(vector!=null ? true:false);
         } catch (Exception e) {
+            vector2=null;
         }
 
     }//GEN-LAST:event_bObserve2ActionPerformed
