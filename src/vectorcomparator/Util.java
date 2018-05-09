@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vectorcomparator;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,6 +18,7 @@ import javax.swing.JOptionPane;
  * @author Timur
  */
 public class Util {
+
     public static double Compare(List<Vector> vector, List<Vector> vector2) {
 
         for (int i = 0; i < vector.size(); i++) {
@@ -52,35 +49,46 @@ public class Util {
     }
 
     public static ArrayList<Vector> Verify(String p) {
-        List<Vector> vector = new ArrayList<Vector>();
-        return Destruct(p);
+
+        if (p != "") {
+
+            if (p.contains(".svg")) {
+                File f = new File(p);
+                if (f.exists() & 0 < f.length() & f.length() < 10000000) {
+                    return Parse(f);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Файл слишком большой либо файл не существует или пуст", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Неверный формат", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Не указан путь", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
     }
-    
-    public static ArrayList Destruct(String path) {
+
+    public static ArrayList<Vector> Parse(File f) {
         ArrayList<Vector> list = new ArrayList<>();
         String svg = "";
         Pattern p;
         Matcher m;
 
-//        Pattern doublePattern;
-//        String doublePatternString = "\\-?\\d+(\\.\\d+)?";
         /**
          * Запись файла SVG в переменную
          */
         try {
-            svg = new String(Files.readAllBytes(Paths.get(path)));
-            if (svg.length()>10000000) {
-                JOptionPane.showMessageDialog(null,"Eggs are not supposed to be green.","Error",JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+            svg = new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
         } catch (IOException e) {
-            
-            return list;
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         p = Pattern.compile("<[a-z][^(\\/>)]+\\/>");
         m = p.matcher(svg);
-//        doublePattern  = Pattern.compile("\\-?\\d+(\\.\\d+)?");
 
         /**
          * Запись элементов в формализованую запись
@@ -91,43 +99,47 @@ public class Util {
             ArrayList<Vector> temp;
             switch (words[0]) {
                 case "<path":
-                    temp = PathDestruct(str);
+                    temp = PathParse(str);
                     if (temp.contains(null)) {
-                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-                    }else{
+//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    } else {
                         list.addAll(temp);
                     }
                     break;
                 case "<rect":
-                    temp = RectDestruct(words);
+                    temp = RectParse(words);
                     if (temp.contains(null)) {
-                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-                    }else{
+//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    } else {
                         list.addAll(temp);
                     }
                     break;
                 case "<circle":
-                    list.add(CircleDestruct(words));
+                    list.add(CircleParse(words));
                     break;
                 case "<ellipse":
-                    list.add(EllipseDestruct(words));
+                    list.add(EllipseParse(words));
                     break;
                 case "<line":
-                    list.add(LineDestruct(words));
+                    list.add(LineParse(words));
                     break;
                 case "<polyline":
-                    temp = PolylineDestruct(words, false);
+                    temp = PolylineParse(words, false);
                     if (temp.contains(null)) {
-                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-                    }else{
+//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    } else {
                         list.addAll(temp);
                     }
                     break;
                 case "<polygon":
-                    temp = PolygonDestruct(words);
+                    temp = PolygonParse(words);
                     if (temp.contains(null)) {
-                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-                    }else{
+//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    } else {
                         list.addAll(temp);
                     }
                     break;
@@ -160,7 +172,7 @@ public class Util {
         return str;
     }
 
-    public static ArrayList<Vector> RectDestruct(String[] words) {
+    public static ArrayList<Vector> RectParse(String[] words) {
         ArrayList<Vector> list = new ArrayList<>();
 
         Rect rect = new Rect();
@@ -187,7 +199,7 @@ public class Util {
         return list;
     }
 
-    public static Circle CircleDestruct(String[] words) {
+    public static Circle CircleParse(String[] words) {
         Circle circle = new Circle();
         for (String word : words) {
             if (word.matches("^cx=\"\\d+\"$")) {
@@ -203,26 +215,26 @@ public class Util {
         return circle;
     }
 
-    public static Ellipse EllipseDestruct(String[] words) {
+    public static Ellipse EllipseParse(String[] words) {
         Ellipse ellipse = new Ellipse();
         for (String word : words) {
-            if (word.matches("^cx=\"\\d+\"$")) {
+            if (word.contains("cx")) {
                 ellipse.posX = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
-            if (word.matches("^cy=\"\\d+\"$")) {
+            if (word.contains("cy")) {
                 ellipse.posY = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
-            if (word.matches("^rx=\"\\d+\"$")) {
+            if (word.contains("rx")) {
                 ellipse.rx = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
-            if (word.matches("^ry=\"\\d+\"$")) {
+            if (word.contains("ry")) {
                 ellipse.ry = Double.parseDouble(word.replaceAll("[^\\d\\.]+", ""));
             }
         }
         return ellipse;
     }
 
-    public static Line LineDestruct(String[] words) {
+    public static Line LineParse(String[] words) {
         Line line = new Line();
         Pattern p = Pattern.compile("\\-?\\d+(\\.\\d+)?");
         for (int i = 1; i < words.length; i++) {
@@ -250,7 +262,7 @@ public class Util {
         return line;
     }
 
-    public static ArrayList<Vector> PolylineDestruct(String[] words, boolean returnPolygon) {
+    public static ArrayList<Vector> PolylineParse(String[] words, boolean returnPolygon) {
         ArrayList<Vector> lines = new ArrayList<>();
         List<Vertex> vertices = new ArrayList<>();
         for (int i = 1; i < words.length; i++) {
@@ -276,11 +288,11 @@ public class Util {
         return lines;
     }
 
-    public static ArrayList<Vector> PolygonDestruct(String[] words) {
-        return PolylineDestruct(words, true);
+    public static ArrayList<Vector> PolygonParse(String[] words) {
+        return PolylineParse(words, true);
     }
 
-    public static ArrayList<Vector> PathDestruct(String str) {
+    public static ArrayList<Vector> PathParse(String str) {
 
         Pattern p1 = Pattern.compile("\\sd=\"[^\"]+\""); //паттерн для вычленения геометрической составляющей элемента
         Matcher m1 = p1.matcher(str);
@@ -301,7 +313,7 @@ public class Util {
         Vertex prevQuadraticBezierPoint = new Vertex();
 
         if (e.length == 0) {
-            return new ArrayList();
+            return new ArrayList<Vector>();
         }
         for (String el : e) {
             if (el.contains("m")) {
@@ -318,8 +330,8 @@ public class Util {
                     i++;
                 }
 
-                if (i % 2 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 2 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 curPos.Translate(x, y);
@@ -346,8 +358,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 2 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 2 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 prevCubicBezierPoint = null;
@@ -430,8 +442,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 6 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 6 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("s")) {
@@ -477,8 +489,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
 
@@ -516,8 +528,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("t")) {
@@ -563,8 +575,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("a")) {
@@ -612,8 +624,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 7 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 7 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("z") | el.contains("Z")) {
@@ -634,8 +646,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 2 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 2 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 curPos.Set(x, y);
@@ -658,8 +670,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 2 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 2 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 prevCubicBezierPoint = null;
@@ -734,8 +746,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 6 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 6 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("S")) {
@@ -779,8 +791,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
 
@@ -816,8 +828,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("T")) {
@@ -861,8 +873,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 4 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 4 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (el.contains("A")) {
@@ -908,8 +920,8 @@ public class Util {
                     }
                     i++;
                 }
-                if (i % 7 != 0|i==0) {
-                    JOptionPane.showMessageDialog(null,"Bad file structure!","Error",JOptionPane.ERROR_MESSAGE);
+                if (i % 7 != 0 | i == 0) {
+                    JOptionPane.showMessageDialog(null, "Bad file structure!", "Error", JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             }

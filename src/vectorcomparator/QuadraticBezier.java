@@ -18,9 +18,9 @@ public class QuadraticBezier extends Vector {
     double weight;
 
     public QuadraticBezier(Vertex startPoint, Vertex endPoint, Vertex controlPoint) {
-        this.cp = controlPoint;
-        this.ep = endPoint;
-        this.sp = startPoint;
+        this.cp = new Vertex(controlPoint);
+        this.ep = new Vertex(endPoint);
+        this.sp = new Vertex(startPoint);
         this.weight = 1;
     }
 

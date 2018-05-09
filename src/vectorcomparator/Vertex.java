@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vectorcomparator;
 
 /**
@@ -24,9 +19,9 @@ public class Vertex {
         this.posY = posY;
     }
     
-    public Vertex(Vertex vertexToClone){
-        this.posX = vertexToClone.posX;
-        this.posY = vertexToClone.posY;
+    public Vertex(Vertex v){
+        this.posX = v.posX;
+        this.posY = v.posY;
     }
 
     public void Translate(double shiftX, double shiftY) {

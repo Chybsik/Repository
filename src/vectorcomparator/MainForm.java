@@ -97,6 +97,7 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         bObserve.setText("Обзор");
         bObserve.addActionListener(new java.awt.event.ActionListener() {
@@ -200,11 +201,13 @@ public class MainForm extends javax.swing.JFrame {
         try {
             p1 = jFileChooser.getSelectedFile().getAbsolutePath();
             vector = Util.Verify(p1);
-            if (vector==null) {
-                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+//            if (vector==null) {
+//                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+//            }
+            if(vector != null){
+                tPath1.setText(p1);
+                bCalculate.setEnabled(vector2!=null ? true:false);
             }
-            tPath1.setText(p1);
-            bCalculate.setEnabled(vector2!=null ? true:false);
         } catch (Exception e) {
             vector =null;
         }
@@ -257,11 +260,13 @@ public class MainForm extends javax.swing.JFrame {
         try {
             p2 = jFileChooser.getSelectedFile().getAbsolutePath();
             vector2 = Util.Verify(p2);
-            if (vector==null) {
-                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+//            if (vector==null) {
+//                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
+//            }
+            if(vector2 != null){
+                tPath2.setText(p2);
+                bCalculate.setEnabled(vector!=null ? true:false);
             }
-            tPath2.setText(p2);
-            bCalculate.setEnabled(vector!=null ? true:false);
         } catch (Exception e) {
             vector2=null;
         }

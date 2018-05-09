@@ -19,10 +19,10 @@ public class CubicBezier extends Vector {
     double weight;
 
     public CubicBezier(Vertex startPoint, Vertex endPoint, Vertex controlPoint1, Vertex controlPoint2) {
-        this.sp = startPoint;
-        this.ep = endPoint;
-        this.cp1 = controlPoint1;
-        this.cp2 = controlPoint2;
+        this.sp = new Vertex(startPoint);
+        this.ep = new Vertex(endPoint);
+        this.cp1 = new Vertex(controlPoint1);
+        this.cp2 = new Vertex(controlPoint2);
         this.weight = 1;
     }
 
