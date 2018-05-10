@@ -1,16 +1,5 @@
 package vectorcomparator;
 
-import javax.swing.*;
-import java.text.*;
-import java.io.File;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
-//import com.kitfox.svg.*;
-//import com.kitfox.svg.app.beans.SVGPanel;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import java.util.ArrayList;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -182,16 +171,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void bCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCalculateActionPerformed
 
-        tOutput.setText(String.valueOf(new DecimalFormat("#.##").format(Util.Compare(vector, vector2))));
-
-        /*
-        JInternalFrame iFrame = new JInternalFrame();
-        iFrame.show();
-        JButton b = new JButton();
-        b.setText(String.valueOf(VectorComparator.Compare(p1, p2)));
-        iFrame.add(b);
-         */
-
+        tOutput.setText(String.valueOf(new java.text.DecimalFormat("#.##").format(Util.Compare(vector, vector2))));
     }//GEN-LAST:event_bCalculateActionPerformed
 
     private void bObserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserveActionPerformed
@@ -201,56 +181,13 @@ public class MainForm extends javax.swing.JFrame {
         try {
             p1 = jFileChooser.getSelectedFile().getAbsolutePath();
             vector = Util.Verify(p1);
-//            if (vector==null) {
-//                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-//            }
-            if(vector != null){
+            if (vector != null) {
                 tPath1.setText(p1);
-                bCalculate.setEnabled(vector2!=null ? true:false);
+                bCalculate.setEnabled(vector2 != null);
             }
         } catch (Exception e) {
-            vector =null;
+            vector = null;
         }
-        
-        
-
-        /*
-        try{
-            BufferedImage pic = ImageIO.read(f);
-            JLabel picLabel = new JLabel(new ImageIcon(pic));
-            add(picLabel);
-        }catch(Exception e){
-            System.out.println("exc");
-        }
-         */
-//        BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D g = image.createGraphics();
-        //g.setClip(jPanel1.getX(), jPanel1.getX(), jPanel1.getHeight(), jPanel1.getWidth());
-        /*
-        SVGUniverse svgUniverse = new SVGUniverse();
-        try{
-            svgUniverse.loadSVG(f.toURI().toURL());
-                    
-            SVGDiagram svgDiagram = svgUniverse.getDiagram(svgUniverse.loadSVG(f.toURI().toURL()));
-            svgDiagram.render(g);
-            svgDiagram.setIgnoringClipHeuristic(true);
-            
-            svgUniverse.setCurTime(1);
-            svgUniverse.updateTime();
-            System.out.println("nope");
-        }catch(Exception e){
-            System.out.println("catch ya!");
-        }
-         */
- /*
-        SVGPanel svgPanel = new SVGPanel();
-        try{
-            svgPanel.setSvgResourcePath(p1);
-        }catch(Exception e){}
-        svgPanel.setVisible(true);
-        svgPanel.setLocation(jPanel1.getX(), jPanel1.getY());
-        svgPanel.setScaleToFit(true);
-         */
     }//GEN-LAST:event_bObserveActionPerformed
 
     private void bObserve2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bObserve2ActionPerformed
@@ -260,15 +197,12 @@ public class MainForm extends javax.swing.JFrame {
         try {
             p2 = jFileChooser.getSelectedFile().getAbsolutePath();
             vector2 = Util.Verify(p2);
-//            if (vector==null) {
-//                JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
-//            }
-            if(vector2 != null){
+            if (vector2 != null) {
                 tPath2.setText(p2);
-                bCalculate.setEnabled(vector!=null ? true:false);
+                bCalculate.setEnabled(vector != null);
             }
         } catch (Exception e) {
-            vector2=null;
+            vector2 = null;
         }
 
     }//GEN-LAST:event_bObserve2ActionPerformed

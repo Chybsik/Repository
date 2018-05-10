@@ -16,11 +16,15 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Timur
+ * 
+ * Класс Util содержит весь функционал задействованный в данном приложении
+ * 
  */
 public class Util {
-
+    //Метод Compare осуществляет сравнение
     public static double Compare(List<Vector> vector, List<Vector> vector2) {
 
+        //Вычисление поля weight первого рисунка
         for (int i = 0; i < vector.size(); i++) {
             Vector temp = vector.get(i);
             temp.weight = 1;
@@ -29,7 +33,7 @@ public class Util {
             }
             vector.set(i, temp);
         }
-
+        //Вычисление поля weight второго рисунка
         for (int i = 0; i < vector2.size(); i++) {
             Vector temp = vector2.get(i);
             temp.weight = 1;
@@ -38,7 +42,7 @@ public class Util {
             }
             vector2.set(i, temp);
         }
-
+        //Вычисление конечного результата
         double result = 0;
         for (int i = 0; i < vector.size(); i++) {
             for (int j = 0; j < vector2.size(); j++) {
@@ -48,12 +52,16 @@ public class Util {
         return vector2.isEmpty() ? 0 : result / vector2.size();
     }
 
+    /*
+    * Метод Verify осуществляет проверку файлов на корректность и вызывает метод Compare в случае благоприятного исхода
+    */
     public static ArrayList<Vector> Verify(String p) {
-
+        //Проверка на пустой путь к файлу
         if (p != "") {
-
+            //Проверка на соответствие формату
             if (p.contains(".svg")) {
                 File f = new File(p);
+                //Проверка на размер файла
                 if (f.exists() & 0 < f.length() & f.length() < 10000000) {
                     return Parse(f);
                 } else {
@@ -71,15 +79,16 @@ public class Util {
 
     }
 
+    /*
+    * Метод Parse производит анализ и формализацию элементов SVG файла, записывая их как экземпляры соответствующих объектов
+    */
     public static ArrayList<Vector> Parse(File f) {
         ArrayList<Vector> list = new ArrayList<>();
         String svg = "";
         Pattern p;
         Matcher m;
 
-        /**
-         * Запись файла SVG в переменную
-         */
+        //Запись файла SVG в переменную
         try {
             svg = new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
         } catch (IOException e) {
@@ -90,18 +99,15 @@ public class Util {
         p = Pattern.compile("<[a-z][^(\\/>)]+\\/>");
         m = p.matcher(svg);
 
-        /**
-         * Запись элементов в формализованую запись
-         */
+        //Запись элементов
         while (m.find()) {
-            String str = m.group().replaceAll("\\s{2,}", " ");                     //Убирает табулирование
+            String str = m.group().replaceAll("\\s{2,}", " ");
             String[] words = str.split(" ");
             ArrayList<Vector> temp;
             switch (words[0]) {
                 case "<path":
                     temp = PathParse(str);
                     if (temp.contains(null)) {
-//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
                         return null;
                     } else {
                         list.addAll(temp);
@@ -110,7 +116,6 @@ public class Util {
                 case "<rect":
                     temp = RectParse(words);
                     if (temp.contains(null)) {
-//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
                         return null;
                     } else {
                         list.addAll(temp);
@@ -128,7 +133,6 @@ public class Util {
                 case "<polyline":
                     temp = PolylineParse(words, false);
                     if (temp.contains(null)) {
-//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
                         return null;
                     } else {
                         list.addAll(temp);
@@ -137,7 +141,6 @@ public class Util {
                 case "<polygon":
                     temp = PolygonParse(words);
                     if (temp.contains(null)) {
-//                        JOptionPane.showMessageDialog(null,"Bad structure!","Error",JOptionPane.ERROR_MESSAGE);
                         return null;
                     } else {
                         list.addAll(temp);
@@ -147,29 +150,7 @@ public class Util {
                     break;
             }
         }
-
-        /**
-         * Присвоение полю weight каждого элемента значения
-         */
-        for (int i = 0; i < list.size() - 1; i++) {
-            Vector temp = list.get(i);
-            for (int j = i + 1; j < list.size(); j++) {
-                Vector temp2 = list.get(j);
-                temp.weight *= 1 - temp.CompareTo(temp2);
-
-            }
-            list.set(i, temp);
-        }
-
         return list;
-    }
-
-    public static String Clean(String str) {
-        String[] lib = new String[]{"requiredFeatures", "requiredExtensions", "systemLanguage", "id", "xml:base", "xml:lang", "xml:space", "onfocusin", "onfocusout", "onactivate", "onclick", "onmousedown", "onmouseup", "onmouseover", "onmousemove", "onmouseout", "onload", "alignment-baseline", "baseline-shift", "clip", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cursor", "direction", "display", "dominant-baseline", "enable-background", "fill", "fill-opacity", "fill-rule", "filter", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "glyph-orientation-horizontal", "glyph-orientation-vertical", "image-rendering", "kerning", "letter-spacing", "lighting-color", "marker-end", "marker-mid", "marker-start", "mask", "opacity", "overflow", "pointer-events", "shape-rendering", "stop-color", "stop-opacity", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "text-anchor", "text-decoration", "text-rendering", "unicode-bidi", "visibility", "word-spacing", "writing-mode", "class", "style", "externalResourcesRequired", "transform", "pathLength"};
-        for (int i = 0; i < lib.length; i++) {
-            str = str.replace(lib[i], "");
-        }
-        return str;
     }
 
     public static ArrayList<Vector> RectParse(String[] words) {
@@ -284,7 +265,6 @@ public class Util {
         if (returnPolygon) {
             lines.add(new Line(vertices.get(vertices.size() - 1), vertices.get(0)));
         }
-        //Polyline polyline = new Polyline(lines);
         return lines;
     }
 
@@ -294,7 +274,7 @@ public class Util {
 
     public static ArrayList<Vector> PathParse(String str) {
 
-        Pattern p1 = Pattern.compile("\\sd=\"[^\"]+\""); //паттерн для вычленения геометрической составляющей элемента
+        Pattern p1 = Pattern.compile("\\sd=\"[^\"]+\"");
         Matcher m1 = p1.matcher(str);
         String s = "";
         if (m1.find()) {
@@ -307,9 +287,9 @@ public class Util {
         Vertex curPos = new Vertex(0, 0);
         Vertex origin = null;
 
-        Pattern p = Pattern.compile("\\-?\\d+(\\.\\d+)?"); //паттерн для вычленения параметров
+        Pattern p = Pattern.compile("\\-?\\d+(\\.\\d+)?");
 
-        Vertex prevCubicBezierPoint = new Vertex(); //Для использования при разбиении кубических кривых Безье
+        Vertex prevCubicBezierPoint = new Vertex();
         Vertex prevQuadraticBezierPoint = new Vertex();
 
         if (e.length == 0) {
@@ -927,18 +907,5 @@ public class Util {
             }
         }
         return list;
-    }
-
-    public Vector AddElement(String type) {
-        Vector el = new Line(0, 0, 0, 0);
-        switch (type) {
-            case "M":
-                break;
-            case "m":
-                break;
-            case "V":
-                el = new Line(0, 0, 0, 0);
-        }
-        return el;
     }
 }

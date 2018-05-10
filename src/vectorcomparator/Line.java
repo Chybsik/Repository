@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vectorcomparator;
 
 /**
@@ -15,10 +10,8 @@ public class Line extends Vector {
     private double posY1;
     private double posX2;
     private double posY2;
-//    private double length;
 
     private double weight;
-//    private double angle;
 
     public Line(){
         this.posX1 = 0;
@@ -36,15 +29,6 @@ public class Line extends Vector {
         this.posY2 = posY2;
 
         this.weight = 1;
-
-//        length = Math.sqrt(Math.pow(posX1 - posX2, 2) + Math.pow(posY1 - posY2, 2));
-//        if (Double.isNaN(length)) {
-//            length = 0;
-//        }
-//        angle = Math.acos((posX2 - posX1) / length);
-//        if (Double.isNaN(angle)) {
-//            angle = 0;
-//        }
     }
 
     public Line(Vertex v1, Vertex v2) {
@@ -53,15 +37,6 @@ public class Line extends Vector {
         this.posY1 = v1.posY;
         this.posY2 = v2.posY;
         this.weight = 1;
-
-//        length = Math.sqrt(Math.pow(posX1 - posX2, 2) + Math.pow(posY1 - posY2, 2));
-//        if (Double.isNaN(length)) {
-//            length = 0;
-//        }
-//        angle = Math.acos((posX2 - posX1) / length);
-//        if (Double.isNaN(angle)) {
-//            angle = 0;
-//        }
     }
     
     public void SetX1(double posX1){
