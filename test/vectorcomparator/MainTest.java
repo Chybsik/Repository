@@ -43,7 +43,7 @@ public class MainTest {
     @Test
     public void LoadTest() {
         String path = "C:\\temp\\sakura-2069810.svg";
-        Assert.assertNotNull(Util.Verify(path));
+        Assert.assertEquals(Util.Compare(Util.Verify(path), Util.Verify(path)),1,0);
     }
     
     //Тест пустого пути
